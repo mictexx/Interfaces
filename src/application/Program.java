@@ -15,9 +15,9 @@ public class Program {
 
 
 	public static void main(String[] args) throws ParseException {
-	
-		Scanner sc = new Scanner(System.in);
+
 		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		
@@ -39,11 +39,18 @@ public class Program {
 		System.out.println("Contract date: "+contract.getDate());
 		System.out.println("Contract amount: "+contract.getTotalValue());
 		
-		PaypalService paypal = new PaypalService();
+		//PaypalService paypal = new PaypalService();
 		
-		ContractService contractservice = new ContractService(paypal);
+		ContractService contractservice = new ContractService(new PaypalService());
 		
 		contractservice.processContract(contract, installments);
+		
+		
+		for(Installment list: contract.getInstallments()) {
+			if (list != null) {
+			System.out.println(list);
+			}
+		}
 		
 		sc.close();	
 	}

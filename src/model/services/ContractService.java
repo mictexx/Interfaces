@@ -31,28 +31,38 @@ public class ContractService {
 		
 
 		List<Installment> installment = new ArrayList<>();
-		Calendar c = java.util.Calendar.getInstance();
+		
 		double vlr = contract.getTotalValue()/months;
 		Locale.setDefault(Locale.US);
 		
 		for(int i = 1;i<=months;i++) {
 			
-			c.setTime(contract.getDate());
-			c.add(Calendar.MONTH, i);
-			Double interest = onlinepaymentservice.interes(vlr, i);
-			Double fee      = onlinepaymentservice.paymentFee(interest);
-			installment.add(new Installment(c.getTime(),fee));
+			double updatedQuota = vlr + onlinepaymentservice.interes(vlr, i); 
+			double fullQuota    = updatedQuota + onlinepaymentservice.paymentFee(updatedQuota);
 			
+			Date dueDate = addMonths(contract.getDate(),i);
+			//installment.add(new Installment(dueDate,fullQuota));
+			contract.getInstallments().add(new Installment(dueDate,fullQuota));
 			
 			
 		}
 		
-		for(Installment list: installment) {
-			if (list != null) {
-			System.out.println(sdf.format(list.getDueDate()) + " - R$ " + list.getAmount());
-			}
-		}
+
 		
+		
+		
+
+		
+	}
+
+	
+	
+	private Date addMonths(Date date, int N) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.MONTH, N);
+		
+		return c.getTime();
 	}
 	
 }

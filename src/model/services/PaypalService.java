@@ -3,34 +3,25 @@ package model.services;
 public class PaypalService implements OnlinePaymentService{
 
 	
-	Double interest = 0.00;
-	Double fee      = 0.00;
+	private static final double PAYMENT_FEE = 0.02;
+	private static final double MONTHLY_INTEREST = 0.01;
 	
 	public PaypalService() {
 
 	}
 
-	
-	public PaypalService(Double interest, Double fee) {
-		this.interest = interest;
-		this.fee = fee;
-	}
 
 	@Override
 	public Double paymentFee(Double amount) {
-
-		fee = interest * 1.02;
 		
-		return fee;
+		return amount * PAYMENT_FEE;
 	}
 
 	@Override
 	public Double interes(Double amount, Integer months) {
 		
-		double vlr = amount;
-		interest = vlr + (vlr * 0.01 * months);
 		
-		return interest;
+		return amount * months * MONTHLY_INTEREST;
 	}
 
 }
